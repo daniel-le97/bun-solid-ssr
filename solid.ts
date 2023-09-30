@@ -61,11 +61,6 @@ export const solidPlugin: BunPlugin = {
         build.onLoad( { filter: /\.tsx$/ }, async ( { path } ) => {
             let data = await Bun.file( path ).text();
             let res = await transformAsync( data, { ...babel_opt, filename: path } );
-
-            if ( !res || !res.code )
-            {
-                return { contents: '' };
-            }
             const transformedFileContent = await injectImports( res.code );
             return { contents: transformedFileContent.code, loader: 'js' };
         } );

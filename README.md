@@ -12,7 +12,8 @@ To run:
 ```bash
 bun run dev
 ```
+uses:
+[unjs-unimport](https://github.com/unjs/unimport): to auto import!
 
-This project was created using `bun init` in bun v0.8.0. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.
 
-[unImport](https://github.com/unjs/unimport): to auto import!
+check out the vue version at [bun-vue-ssr](https://github.com/daniel-le97/bun-vue-ssr)
