@@ -1,0 +1,26 @@
+{
+  "name": "bun-solid",
+  "module": "index.ts",
+  "type": "module",
+  "scripts": {
+    "dev": "bun build.tsx && bun dev.tsx --watch",
+    "build": "bun build.tsx",
+    "serve": "bun dev.tsx",
+    "update": "bunx taze major -w && bun install"
+  },
+  "devDependencies": {
+    "bun-types": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "@babel/core": "^7.23.0",
+    "@babel/preset-typescript": "^7.23.0",
+    "babel": "^6.23.0",
+    "babel-preset-solid": "^1.7.12",
+    "consola": "^3.2.3",
+    "solid-js": "^1.7.12",
+    "typescript": "^5.2.2"
+  }
+}
