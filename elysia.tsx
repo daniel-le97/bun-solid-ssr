@@ -2,6 +2,7 @@ import './build.tsx';
 import { html } from "@elysiajs/html";
 import { FileSystemRouter } from "bun";
 import Elysia from "elysia";
+import { autoroutes } from 'elysia-autoroutes';
 import { readdirSync } from 'fs';
 import * as path from 'path';
 import { generateHydrationScript } from "solid-js/web";
@@ -47,7 +48,10 @@ function getAllFiles(directories: string[]): string[] {
 
 const htmlContent = await Bun.file('./index.html').text()
 
-const app = new Elysia().use(html())
+const app = new Elysia().use(html()).use(autoroutes({
+    routesDir: './routes',
+    prefix: '/api' // -> optional
+  }))
 
 for await (const [route, module] of Object.entries(serverRouter.routes)) {
     app.get(route, async(ctx) =>{
@@ -56,6 +60,7 @@ for await (const [route, module] of Object.entries(serverRouter.routes)) {
         if (!clientMatch) {
             return 'unable to find a matched route'
         }
+        // @ts-expect-error this is rebuilt on every reload
         const page = (await (await import('./build/ssr/entry/entry-server.js')).render(module)).html
         let content = htmlContent
         .replace( '{{ dynamicPath }}', '/pages/' + clientMatch.src )
@@ -63,7 +68,6 @@ for await (const [route, module] of Object.entries(serverRouter.routes)) {
                     .replace('<!--html-head-->', generateHydrationScript() + '')
                     // add the server side html to the html markup
                    .replace( '<!--html-body-->', page )
-
                    return ctx.html(content)
     })
 }
@@ -76,3 +80,5 @@ for (const file of getAllFiles(['./build/client'])) {
 
 app.listen(3003)
 console.log(`http://localhost:3003`);
+
+export type ElysiaApp = typeof app
