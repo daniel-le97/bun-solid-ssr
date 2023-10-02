@@ -2,9 +2,9 @@ import * as path from "path";
 import { statSync } from "fs";
 import type { ServeOptions } from "bun";
 import { FileSystemRouter } from "bun";
-import { generateHydrationScript } from 'solid-js/web';
+import  htmlContent from './index.html'
 
-const PROJECT_ROOT = import.meta.dir;
+const PROJECT_ROOT = process.cwd()
 const PUBLIC_DIR = path.resolve( PROJECT_ROOT, "public" );
 const BUILD_DIR = path.resolve( PROJECT_ROOT, "build" );
 const ASSETS_DIR = path.resolve( PROJECT_ROOT, 'assets' );
@@ -70,18 +70,22 @@ function serveFromDir (
         {
           return new Response( "builtMatch not found", { status: 500 } );
         }
-  
-        let html = await Bun.file( './index.html' ).text();
+        
+        // import index.html for use as the html shell
+        let html = htmlContent
+        // console.log(html);
+        
+        // await Bun.file( './index.html' ).text();
         
         // @ts-ignore rebuilt every build
-        const page = (await (await import('./build/ssr/entry/entry-server.js')).render(match.filePath)).html
+        const page = (await (await import(Bun.resolveSync('./build/ssr/entry/entry-server.js', process.cwd()))).render(match.filePath))
   
                     // set the page javascript we want to fetch for client
         html = html.replace( '{{ dynamicPath }}', '/pages/' + builtMatch.src )
                     // add solids hydration script to the head
-                    .replace('<!--html-head-->', generateHydrationScript() + '')
+                    .replace('<!--html-head-->', page.head)
                     // add the server side html to the html markup
-                   .replace( '<!--html-body-->', page )
+                   .replace( '<!--html-body-->', page.html )
   
   
         // send the finalized html  

@@ -1,11 +1,10 @@
-import './build.tsx';
-import { html } from "@elysiajs/html";
+// import './build.ts';
 import { FileSystemRouter } from "bun";
 import Elysia from "elysia";
-import { autoroutes } from 'elysia-autoroutes';
 import { readdirSync } from 'fs';
 import * as path from 'path';
-import { generateHydrationScript } from "solid-js/web";
+import  htmlContent from './index.html'
+// import { html } from "@elysiajs/html";
 
 const clientRouter = new FileSystemRouter( {
     style: 'nextjs',
@@ -16,7 +15,7 @@ const serverRouter = new FileSystemRouter( {
     dir: './build/ssr/pages'
 } );
 
-const PROJECT_ROOT = import.meta.dir;
+const PROJECT_ROOT = process.cwd()
 const PUBLIC_DIR = path.resolve( PROJECT_ROOT, "public" );
 const BUILD_DIR = path.resolve( PROJECT_ROOT, "build" );
 const ASSETS_DIR = path.resolve( PROJECT_ROOT, 'assets' );
@@ -46,33 +45,37 @@ function getAllFiles(directories: string[]): string[] {
     return files;
 }
 
-const htmlContent = await Bun.file('./index.html').text()
 
-const app = new Elysia().use( html() )
-    .use( autoroutes( {
-    routesDir: './routes',
-    prefix: '/api' // -> optional
-  }))
+
+
+
+const app = new Elysia()
+// this does not play well when trying to bundle atm
+// just return a w responde with headers set instead
+    // .use( html() )
+
     .get( '*', async ( ctx ) => {
-        console.log(ctx.request);
+        // console.log(ctx.request);
         
         const serverMatch = serverRouter.match(ctx.request)
         const clientMatch = clientRouter.match(ctx.request)
-        if (!clientMatch) {
+        if ( !clientMatch?.src || !serverMatch?.filePath )
+        {
             return 'unable to find a matched route'
         }
         // @ts-ignore
-        const page = (await (await import('./build/ssr/entry/entry-server.js')).render(serverMatch?.filePath)).html
+        const page = ( await ( await import(Bun.resolveSync('./build/ssr/entry/entry-server.js', process.cwd()) ) ).render( serverMatch.filePath ) )
         let content = htmlContent
         .replace( '{{ dynamicPath }}', '/pages/' + clientMatch.src )
                     // add solids hydration script to the head
-                    .replace('<!--html-head-->', generateHydrationScript() + '')
+                    .replace('<!--html-head-->', page.head)
                     // add the server side html to the html markup
-                   .replace( '<!--html-body-->', page )
-        if (!content.includes('<!--html-body-->')) {
-            return ctx.html(content)
-        }
-        
+                   .replace( '<!--html-body-->', page.html )
+
+            return new Response( content, {
+                headers: { "Content-Type": "text/html;charset=utf-8" },
+              } );
+
     } )
 
 // serve our built client pages/modules
