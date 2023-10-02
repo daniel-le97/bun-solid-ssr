@@ -48,29 +48,32 @@ function getAllFiles(directories: string[]): string[] {
 
 const htmlContent = await Bun.file('./index.html').text()
 
-const app = new Elysia().use(html()).use(autoroutes({
+const app = new Elysia().use( html() )
+    .use( autoroutes( {
     routesDir: './routes',
     prefix: '/api' // -> optional
   }))
-
-for await (const [route, module] of Object.entries(serverRouter.routes)) {
-    app.get(route, async(ctx) =>{
+    .get( '*', async ( ctx ) => {
+        console.log(ctx.request);
         
-        const clientMatch = clientRouter.match(route)
+        const serverMatch = serverRouter.match(ctx.request)
+        const clientMatch = clientRouter.match(ctx.request)
         if (!clientMatch) {
             return 'unable to find a matched route'
         }
-        // @ts-expect-error this is rebuilt on every reload
-        const page = (await (await import('./build/ssr/entry/entry-server.js')).render(module)).html
+        // @ts-ignore
+        const page = (await (await import('./build/ssr/entry/entry-server.js')).render(serverMatch?.filePath)).html
         let content = htmlContent
         .replace( '{{ dynamicPath }}', '/pages/' + clientMatch.src )
                     // add solids hydration script to the head
                     .replace('<!--html-head-->', generateHydrationScript() + '')
                     // add the server side html to the html markup
                    .replace( '<!--html-body-->', page )
-                   return ctx.html(content)
-    })
-}
+        if (!content.includes('<!--html-body-->')) {
+            return ctx.html(content)
+        }
+        
+    } )
 
 // serve our built client pages/modules
 for (const file of getAllFiles(['./build/client'])) {

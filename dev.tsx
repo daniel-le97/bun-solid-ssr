@@ -73,7 +73,7 @@ function serveFromDir (
   
         let html = await Bun.file( './index.html' ).text();
         
-        // @ts-expect-error module is rebuilt every reload
+        // @ts-ignore rebuilt every build
         const page = (await (await import('./build/ssr/entry/entry-server.js')).render(match.filePath)).html
   
                     // set the page javascript we want to fetch for client
