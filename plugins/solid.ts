@@ -2,25 +2,35 @@
 import { transformAsync, TransformOptions } from '@babel/core';
 // @ts-ignore
 import ts from '@babel/preset-typescript';
+import autoprefixer from 'autoprefixer';
 // @ts-ignore
 import solid from 'babel-preset-solid';
 import type { BunPlugin } from 'bun';
+import postcss from 'postcss';
 import { UnimportOptions } from "unimport";
+// @ts-ignore
+import tailwindcssNested from  'tailwindcss/nesting';
+import tailwindcss from 'tailwindcss'
+// @ts-ignore
+import postcss_import from 'postcss-import'
+import { transpileTS } from './html.ts';
 
 export let generateTypes: string;
+
+
 export const solidPlugin: BunPlugin = {
     name: 'solid loader',
     async setup ( build ) {
 
         const { createUnimport } = await import( "unimport" );
-        const { injectImports, generateTypeDeclarations, scanImportsFromDir } = createUnimport( {
+        const { injectImports, generateTypeDeclarations, scanImportsFromDir,} = createUnimport( {
             'presets': [ 'solid-js' ],
             // you can add additional import statements youd like to auto import here
             imports: [ { name: 'Component', from: 'solid-js', 'type': true } ]
         } as UnimportOptions );
 
         // register the components|utils directory for auto importing
-        await scanImportsFromDir( [ './components/**', './utils/**' ], {
+        await scanImportsFromDir( [ './components/**' ], {
             'filePatterns': [ '*.{tsx,jsx,ts,js,mjs,cjs,mts,cts}' ]
         } );
 
@@ -41,21 +51,6 @@ export const solidPlugin: BunPlugin = {
             ],
         };
 
-        // css loader
-        build.onLoad( { filter: /\.css$/ }, async( args ) => {
-            const fileContents = await Bun.file(args.path).text()
-            const cssCode = `
-                let head = document.head;
-                let style = document.createElement("style");
-                head.appendChild(style);
-                style.type = "text/css";
-                style.appendChild(document.createTextNode(\`${ fileContents }\`));`;
-
-                return{
-                    contents: cssCode,
-                    loader: 'js'
-                }
-        } );
 
         // tsx loader
         build.onLoad( { filter: /\.tsx$/ }, async ( { path } ) => {

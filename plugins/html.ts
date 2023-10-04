@@ -1,4 +1,5 @@
 import { BunPlugin } from "bun";
+import { generateCSS } from "./postcss.ts";
 export const transpileTS = ( code: string, loader: 'ts' | 'js' = 'ts' ) => {
     const transpiler = new Bun.Transpiler( { loader } );
     const content = transpiler.transformSync( code );
@@ -7,14 +8,17 @@ export const transpileTS = ( code: string, loader: 'ts' | 'js' = 'ts' ) => {
   
 
 export const html: BunPlugin = {
-    name: 'bun-vue',
+    name: 'html',
     async setup ( build ) {
         build.onLoad( { filter: /\.html$/ }, async ( args ) => { 
             // console.log('building');
             
-            const content = await Bun.file(args.path).text()
+            let  content = await Bun.file(args.path).text()
 
-            const exporter = `const html = \`${ content }\`\nexport default html`
+            // content = content.replace('<!--html-head-->', `<style>${generateCSS}</style>\n<!--html-head-->`)
+            
+
+            const exporter = `const html = ${JSON.stringify(content)}\nexport default html`
             return {
                 'contents': transpileTS(exporter),
                 loader: 'js'
@@ -22,5 +26,3 @@ export const html: BunPlugin = {
          } );
     }
 };
-
-// Bun.escapeHTML(input)

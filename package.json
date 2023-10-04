@@ -3,14 +3,20 @@
   "module": "index.ts",
   "type": "module",
   "scripts": {
-    "dev": "bun build.ts && bun dev.tsx --watch",
+    "dev": "bun build.ts && bun dev.tsx --hot",
     "build": "bun build.ts",
     "serve": "bun build/dev.js",
     "elysia": "bun build/elysia.js",
     "update": "bunx taze major -w && bun install"
   },
   "devDependencies": {
-    "bun-types": "latest"
+    "autoprefixer": "^10.4.16",
+    "bun-types": "canary",
+    "chokidar": "^3.5.3",
+    "postcss": "^8.4.31",
+    "postcss-import": "^15.1.0",
+    "postcss-nested": "^6.0.1",
+    "tailwindcss": "^3.3.3"
   },
   "peerDependencies": {
     "typescript": "^5.2.2"
@@ -19,7 +25,6 @@
     "@babel/core": "^7.23.0",
     "@babel/preset-typescript": "^7.23.0",
     "@elysiajs/html": "^0.7.0",
-    "babel": "^6.23.0",
     "babel-preset-solid": "^1.7.12",
     "consola": "^3.2.3",
     "elysia": "^0.7.15",
