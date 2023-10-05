@@ -1,14 +1,18 @@
 # Stage 1: Build the application
-FROM oven/bun as builder
+FROM oven/bun 
 
-WORKDIR /
+WORKDIR /app
 
 # Copy the entire project into the image
-COPY . .
+COPY bun.lockb .
+COPY package.json .
 
 # Install dependencies and build the application
-RUN bun install && bun run build
+RUN bun install
 
+COPY . .
+
+RUN bun run build
 # Stage 2: Create the production image
 # FROM oven/bun
 
@@ -25,4 +29,4 @@ ENV NODE_ENV production
 EXPOSE 3000
 
 # Define the command to start your application
-CMD ["bun", "./build/dev.js"] 
+CMD ["bun", "build/dev.js"] 
