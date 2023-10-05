@@ -23,7 +23,7 @@ ENV PORT 3000
 ENV NODE_ENV production
 
 # Expose the port your application listens on (assuming 3000)
-EXPOSE 3000
+# EXPOSE 3000
 
 # Define the command to start your application
 CMD ["bun", "run", "serve"] 
