@@ -13,6 +13,13 @@ import postcss_import from 'postcss-import'
 
 export let generateCSS: string;
 
+
+export const postcssAPI = async(path: string, out: string) => {
+    const contents = await Bun.file(path).text()
+    const results = await postcss([postcss_import,autoprefixer, tailwindcssNested, tailwindcss]).process(contents, {from: path, to: './assets/output.css'})
+    await Bun.write(out, results.css)
+}
+
 export const postcssPlugin: BunPlugin = {
     name: 'postcss',
     setup(build) {

@@ -29,6 +29,6 @@ const app = new Elysia()
         return serveDirectory;
       }
     } ).listen(port)
-console.log(`http://localhost:${port}`);
+// console.log(`http://localhost:${port}`);
 
 export type ElysiaApp = typeof app

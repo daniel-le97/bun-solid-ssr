@@ -7,7 +7,7 @@ const apiRouter = new FileSystemRouter({
     'assetPrefix': '/api'
     
 })
-console.log(apiRouter);
+// console.log(apiRouter);
 
 export const serveApiRoutes = async(route: Request, server?: Server) => {
     const hasRoute = apiRouter.match(route)
