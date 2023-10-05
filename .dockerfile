@@ -10,12 +10,12 @@ COPY . .
 RUN bun install && bun run build
 
 # Stage 2: Create the production image
-# FROM oven/bun
+FROM oven/bun
 
-# WORKDIR /app
+WORKDIR /
 
 # Copy the built application from the builder stage
-# COPY --from=builder /app/build /app/build
+COPY --from=builder /app/build /
 
 # Set the NODE_ENV to production
 ENV PORT 3000
@@ -25,4 +25,4 @@ ENV NODE_ENV production
 EXPOSE 3000
 
 # Define the command to start your application
-CMD ["bun", "./build/dev.js"] 
+CMD ["bun", "./dev.js"] 
