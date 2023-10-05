@@ -4,11 +4,11 @@ import * as path from 'path';
 import { existsSync, rmSync } from "fs";
 import { html } from "./plugins/html.ts";
 import { postcssPlugin, generateCSS } from "./plugins/postcss.ts";
-import { BUILD_DIR} from './lib.ts'
+// import { BUILD_DIR} from './lib.ts'
 
 const isProd = process.env.NODE_ENV === 'production';
-// const PROJECT_ROOT = import.meta.dir;
-// const BUILD_DIR = path.resolve( PROJECT_ROOT, "build" );
+const PROJECT_ROOT = process.cwd();
+const BUILD_DIR = path.resolve( PROJECT_ROOT, "build" );
 
 export const build = async (prod = false) => {
     const router = new FileSystemRouter( {
@@ -22,20 +22,20 @@ export const build = async (prod = false) => {
     }
 
     const clientBuild = await Bun.build( {
-        entrypoints: [ import.meta.dir + '/entry/entry-client.tsx', ...Object.values( router.routes ) ],
+        entrypoints: [ PROJECT_ROOT + '/entry/entry-client.tsx', ...Object.values( router.routes ) ],
         splitting: true,
         target: 'browser',
-        outdir: './build/client',
+        outdir: `${BUILD_DIR}/client`,
         minify: prod,
         plugins: [ solidPlugin ],
     } );
 
     const serverBuild = await Bun.build( {
-        entrypoints: [import.meta.dir + '/entry/entry-server.tsx',...Object.values( router.routes ),],
+        entrypoints: [PROJECT_ROOT + '/entry/entry-server.tsx',...Object.values( router.routes ),],
         splitting: true,
         target: 'bun',
         minify: prod,
-        outdir: './build/ssr',
+        outdir: `${BUILD_DIR}/ssr`,
         plugins: [postcssPlugin , solidPlugin ],
     } );
 
@@ -45,7 +45,7 @@ export const build = async (prod = false) => {
             'splitting': false,
             target: 'bun',
             minify: prod,
-            outdir: './build',
+            outdir: `${BUILD_DIR}`,
             plugins: [html]
         } );
     }
