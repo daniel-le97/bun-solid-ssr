@@ -39,4 +39,4 @@ import { serveApiRoutes } from "./plugins/elysia/router.ts";
   } satisfies ServeOptions;
   
 
-// console.log(`http://localhost:${port}`);
+console.log(`http://localhost:${port}`);
