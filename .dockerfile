@@ -1,7 +1,7 @@
 # Stage 1: Build the application
 FROM oven/bun as builder
 
-WORKDIR /build
+WORKDIR /
 
 # Copy the entire project into the image
 COPY . .
