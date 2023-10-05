@@ -1,7 +1,7 @@
 # Stage 1: Build the application
 FROM oven/bun as builder
 
-WORKDIR /app
+WORKDIR /
 
 # Copy the entire project into the image
 COPY . .
@@ -15,7 +15,7 @@ FROM oven/bun
 WORKDIR /
 
 # Copy the built application from the builder stage
-COPY --from=builder /app/build /
+COPY --from=builder /build /
 
 # Set the NODE_ENV to production
 ENV PORT 3000
