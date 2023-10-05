@@ -25,4 +25,4 @@ ENV NODE_ENV production
 EXPOSE 3000
 
 # Define the command to start your application
-CMD ["bun", "run serve"] 
+CMD ["bun", "build/dev.js"] 
