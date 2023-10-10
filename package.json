@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "bun build.ts && bun dev.tsx --hot",
     "build": "bun build.ts",
-    "serve": "bun build/dev.js",
+    "preview": "bun build/dev.js",
     "elysia": "bun build/elysia.js",
     "update": "bunx taze major -w && bun install"
   },

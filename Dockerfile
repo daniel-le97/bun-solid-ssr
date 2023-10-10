@@ -1,24 +1,3 @@
-# # Stage 1: Build the application
-# FROM oven/bun as builder
-
-# WORKDIR /app
-
-# # Copy the entire project into the image
-# COPY . .
-
-# # Install dependencies and build the application
-# RUN bun install && bun run build
-
-
-# # Set the NODE_ENV to production
-# ENV PORT 3000
-# ENV NODE_ENV production
-
-
-# # Define the command to start your application
-# CMD ["bun", "run", "serve"] 
-
-
 # Stage 1: Build the application
 FROM oven/bun as builder
 
