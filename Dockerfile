@@ -8,7 +8,7 @@ COPY . .
 
 # Install dependencies and build the application
 RUN bun install
-RUN bun run build
+RUN bun build.ts
 
 # Stage 2: Create the production image
 FROM oven/bun
