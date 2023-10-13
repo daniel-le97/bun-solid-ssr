@@ -3,6 +3,7 @@ import { readdirSync, statSync } from "fs";
 import type { ServeOptions } from "bun";
 import { FileSystemRouter } from "bun";
 import  htmlContent from './index.html'
+import { clientRouter, serverRouter } from "./plugins/utils/routers.ts";
 
 export const PROJECT_ROOT = process.cwd()
 export const PUBLIC_DIR = path.resolve( PROJECT_ROOT, "public" );
@@ -13,19 +14,7 @@ export const port = process.env.PORT ?? 3000
 // add other directories you would like to serve statically here
 export const serveDirectories = [ BUILD_DIR + '/client', ASSETS_DIR];
 
-export const srcRouter = new FileSystemRouter( {
-    style: 'nextjs',
-    dir: './pages'
-} );
 
-export const clientRouter = new FileSystemRouter( {
-    style: 'nextjs',
-    dir: './build/client/pages'
-} );
-export const serverRouter = new FileSystemRouter( {
-    style: 'nextjs',
-    dir: './build/ssr/pages'
-} );
 
 export function serveFromDir (
     serveDirectories: string[],
