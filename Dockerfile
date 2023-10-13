@@ -55,7 +55,7 @@ FROM oven/bun
 WORKDIR /app
 
 # Copy only the built artifacts and necessary files from the builder stage
-COPY --from=builder /app/build /app
+COPY --from=builder /app/build /app/build
 
 # Copy only production dependencies from the intermediate stage
 COPY --from=production_dependencies /app/node_modules /app/node_modules
@@ -65,4 +65,4 @@ ENV PORT 3000
 ENV NODE_ENV production
 
 # Define the command to start your application
-CMD ["bun", "index.js"]
+CMD ["bun", "build/index.js"]
