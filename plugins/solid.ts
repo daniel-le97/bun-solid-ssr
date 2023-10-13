@@ -14,6 +14,7 @@ import tailwindcss from 'tailwindcss'
 // @ts-ignore
 import postcss_import from 'postcss-import'
 import { transpileTS } from './html.ts';
+import { buildCache, buildServerCache } from './utils/cache.ts';
 
 export let generateTypes: string;
 
@@ -50,14 +51,18 @@ export const solidPlugin: BunPlugin = {
                 [ solid, { generate: target, hydratable: true } ],
             ],
         };
-
-
         // tsx loader
         build.onLoad( { filter: /\.tsx$/ }, async ( { path } ) => {
+            const cache = target === 'dom' ? buildCache : buildServerCache
+                const has = cache.get(path)
+                if (has) {
+                   return {contents: has, loader: 'js'}
+                }
             let data = await Bun.file( path ).text();
             let res = await transformAsync( data, { ...babel_opt, filename: path } );
-            const transformedFileContent = await injectImports( res.code );
-            return { contents: transformedFileContent.code, loader: 'js' };
+            const transformedFileContent = (await injectImports( res.code )).code;
+            cache.set(path, transformedFileContent)
+            return { contents: transformedFileContent, loader: 'js' };
         } );
     },
 };

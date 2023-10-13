@@ -16,7 +16,7 @@ function App () {
                   <img src={ solidLogo } class="logo solid w-72" alt="Solid logo" />
                 </a>
               </div>
-              <h1>Bun + Solid</h1>
+              <h1 class=' text-blue-400'>Bun + Solid</h1>
               <div class="card">
                 <button onClick={ () => setCount( ( count ) => count + 1 ) }>
                   count is { count() }

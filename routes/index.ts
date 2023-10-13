@@ -1,6 +1,8 @@
-import { ElysiaApp } from "../elysia.tsx";
+import { ElysiaApp } from "../index.ts";
 
-
-export default (request?: Request) => {
-    return 'hello world'
+export default (app: ElysiaApp) => {
+    //http://localhost:3000/api/
+   return app
+    .get('/', (ctx) =>  'hello world')
+    .post('/', (ctx) => ctx.body)
 }

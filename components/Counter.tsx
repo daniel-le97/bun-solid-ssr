@@ -11,7 +11,7 @@ export const Counter: Component<{start?: number}> = (props) =>{
             <button onClick={() => setCount(count() + 1)} class="">Increment</button>
           </>
         }>
-          <div>Count limit reached</div>
+          <div>Count limit reached!</div>
         </Show>
       </div>
     )

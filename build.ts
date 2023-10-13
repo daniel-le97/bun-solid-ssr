@@ -3,7 +3,7 @@ import { generateTypes, solidPlugin } from "./plugins/solid.ts";
 import * as path from 'path';
 import { existsSync, rmSync } from "fs";
 import { html } from "./plugins/html.ts";
-import { postcssPlugin, generateCSS } from "./plugins/postcss.ts";
+import { postcssAPI } from "./plugins/postcss.ts";
 // import { BUILD_DIR} from './lib.ts'
 
 const isProd = process.env.NODE_ENV === 'production';
@@ -18,8 +18,13 @@ export const build = async (prod = false) => {
 
     if ( existsSync( BUILD_DIR ) )
     {
-        rmSync( BUILD_DIR, { recursive: true, force: true } );
+        rmSync( BUILD_DIR + '/client', { recursive: true, force: true } );
+        rmSync( BUILD_DIR + '/ssr', { recursive: true, force: true } );
     }
+
+    const cssBuild = await postcssAPI(
+        PROJECT_ROOT + '/assets/app.css',
+        PROJECT_ROOT + '/assets/output.css' )
 
     const clientBuild = await Bun.build( {
         entrypoints: [ PROJECT_ROOT + '/entry/entry-client.tsx', ...Object.values( router.routes ) ],
@@ -36,12 +41,12 @@ export const build = async (prod = false) => {
         target: 'bun',
         minify: prod,
         outdir: `${BUILD_DIR}/ssr`,
-        plugins: [postcssPlugin , solidPlugin ],
+        plugins: [ solidPlugin ],
     } );
 
     if (isProd || prod) {
         const prodBuild = await Bun.build( {
-            'entrypoints': [ './dev.tsx', './elysia.ts'],
+            'entrypoints': ['./index.ts'],
             'splitting': false,
             target: 'bun',
             minify: prod,
@@ -63,7 +68,7 @@ declare module '*.html' {
   }`
 await Bun.write('./build/imports.d.ts', generateTypes)
 await Bun.write('./build/lib.d.ts', declarations)
-await Bun.write('./build/ssr/main.css.js', `export default ${JSON.stringify(generateCSS)}`)
+// await Bun.write('./build/ssr/main.css.js', `export default ${JSON.stringify(generateCSS)}`)
 };
 // Note: we are invoking this here so it can be imported and ran directly at the beginning of the file
 // or we can call it from package.json

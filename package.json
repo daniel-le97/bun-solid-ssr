@@ -3,9 +3,8 @@
   "module": "index.ts",
   "type": "module",
   "scripts": {
-    "dev": "bun build.ts && bun dev.tsx --hot",
+    "dev": "bun dev.ts",
     "build": "bun build.ts",
-    "serve": "bun build/dev.js",
     "elysia": "bun build/elysia.js",
     "update": "bunx taze major -w && bun install"
   },

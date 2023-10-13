@@ -79,15 +79,17 @@ export function serveFromDir (
         const page = (await (await import(Bun.resolveSync('./build/ssr/entry/entry-server.js', process.cwd()))).render(match.filePath))
 
         // @ts-ignore rebuilt every build
-        const css = (await import(Bun.resolveSync('./build/ssr/main.css.js', process.cwd()))).default
-  
-        const head = `<style>${css}</style>\n`
+        // const css = (await import(Bun.resolveSync('./build/ssr/main.css.js', process.cwd()))).default
+        
+        const tailwind = await Bun.file(ASSETS_DIR + '/output.css').text()
+        const tailwindcss = `<style>${tailwind}</style>\n`
+        // const head = `<style>${css}</style>\n`
         
   
                     // set the page javascript we want to fetch for client
         html = html.replace( '{{ dynamicPath }}', '/pages/' + builtMatch.src )
                     // add solids hydration script to the head
-                    .replace('<!--html-head-->',  head + page.head)
+                    .replace('<!--html-head-->', tailwindcss + page.head)
                     // add the server side html to the html markup
                    .replace( '<!--html-body-->', page.html )
   
