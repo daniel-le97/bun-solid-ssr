@@ -44,7 +44,7 @@ FROM oven/bun as production_dependencies
 WORKDIR /app
 
 # Copy only the `package.json` and `package-lock.json`
-COPY package.json package-lock.json ./
+COPY package.json bun.lockb ./
 
 # Install only production dependencies
 RUN bun install --production
