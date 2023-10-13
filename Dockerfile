@@ -10,13 +10,23 @@ COPY . .
 RUN bun install && bun run build
 
 # Stage 2: Create the production image
-FROM oven/bun
+FROM oven/bun as installer
 
 WORKDIR /app
 
 # Copy only the built artifacts and necessary files from the builder stage
-COPY --from=builder /app /app
+# COPY --from=builder /app/build /app
+copy bun.lockb .
+copy package.json .
 
+RUN bun install --production
+
+FROM oven/bun
+
+WORKDIR /app
+
+COPY --from=builder /app/build /app
+COPY --from=installer /app/node_modules /app
 # Set the NODE_ENV to production
 ENV PORT 3000
 ENV NODE_ENV production

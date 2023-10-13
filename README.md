@@ -17,4 +17,5 @@ uses:
 
 
 check out the vue version at [bun-vue-ssr](https://github.com/daniel-le97/bun-vue-ssr)
+or the svelte version at [bun-svelte-ssr](https://github.com/daniel-le97/bun-svelte-ssr)
 
