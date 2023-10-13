@@ -1,5 +1,5 @@
 import { BunPlugin } from "bun";
-import { generateCSS } from "./postcss.ts";
+
 export const transpileTS = ( code: string, loader: 'ts' | 'js' = 'ts' ) => {
     const transpiler = new Bun.Transpiler( { loader } );
     const content = transpiler.transformSync( code );

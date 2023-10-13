@@ -56,6 +56,7 @@ WORKDIR /app
 
 COPY preload.ts bunfig.toml ./
 COPY assets ./
+COPY plugins/html.ts ./plugins/html.ts
 
 # Copy only the built artifacts and necessary files from the builder stage
 COPY --from=builder /app/build /app/build
