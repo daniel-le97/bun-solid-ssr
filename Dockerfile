@@ -54,7 +54,7 @@ FROM oven/bun
 
 WORKDIR /app
 
-COPY preload.ts ./
+COPY preload.ts bunfig.toml ./
 COPY assets ./
 
 # Copy only the built artifacts and necessary files from the builder stage
