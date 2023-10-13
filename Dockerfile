@@ -32,5 +32,5 @@ ENV PORT 3000
 ENV NODE_ENV production
 
 # Define the command to start your application
-CMD ["bun", "run", "serve"]
+CMD ["bun", "index.js"]
 
