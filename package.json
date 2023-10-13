@@ -14,7 +14,7 @@
     "@types/postcss-import": "^14.0.1",
     "autoprefixer": "^10.4.16",
     "babel-preset-solid": "^1.8.0",
-    "bun-types": "canary",
+    "bun-types": "latest",
     "chokidar": "^3.5.3",
     "postcss": "^8.4.31",
     "postcss-import": "^15.1.0",
