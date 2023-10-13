@@ -25,7 +25,7 @@ FROM oven/bun
 
 WORKDIR /app
 
-COPY --from=builder /app/build /app
+COPY --from=builder /app/build /app/build
 # COPY --from=installer /app/node_modules /app
 
 copy bun.lockb .
