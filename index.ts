@@ -9,10 +9,6 @@ import { autoroutes } from "elysia-autoroutes";
 
 
 const app = new Elysia()
-    .use(autoroutes({
-      'prefix': 'api',
-      'routesDir': 'routes'
-    }))
     .get( '*', async ( ctx ) => {
         // console.log(ctx.request);
         const routerRes = await serveFromRouter(ctx.request)
