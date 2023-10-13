@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "bun dev.ts",
     "build": "bun build.ts",
-    "elysia": "bun build/elysia.js",
+    "serve": "bun build/index.js",
     "update": "bunx taze major -w && bun install"
   },
   "devDependencies": {
