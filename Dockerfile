@@ -54,6 +54,9 @@ FROM oven/bun
 
 WORKDIR /app
 
+COPY preload.ts ./
+COPY assets ./
+
 # Copy only the built artifacts and necessary files from the builder stage
 COPY --from=builder /app/build /app/build
 

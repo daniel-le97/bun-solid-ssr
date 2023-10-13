@@ -49,7 +49,7 @@ export const build = async (prod = false) => {
             'entrypoints': ['./index.ts'],
             'splitting': false,
             target: 'bun',
-            minify: prod,
+            minify: false,
             outdir: `${BUILD_DIR}`,
             plugins: [html]
         } );
