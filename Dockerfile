@@ -7,7 +7,7 @@ WORKDIR /app
 COPY . .
 
 # Install dependencies and build the application
-RUN bun install && bun run build
+RUN bun install && bun run build && rm -rf node_modules
 
 # Stage 2: Create the production image
 FROM oven/bun
@@ -16,6 +16,8 @@ WORKDIR /app
 
 # Copy only the built artifacts and necessary files from the builder stage
 COPY --from=builder /app /app
+
+RUN bun install --production
 
 # Set the NODE_ENV to production
 ENV PORT 3000
