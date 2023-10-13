@@ -1,5 +1,5 @@
 {
-  "name": "bun-solid",
+  "name": "bun-solid-ssr",
   "module": "index.ts",
   "type": "module",
   "scripts": {
