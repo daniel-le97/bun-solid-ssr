@@ -1,8 +1,7 @@
+import Elysia from "elysia";
 import { ElysiaApp } from "../index.ts";
+import { postController } from "./posts/index.ts";
 
-export default (app: ElysiaApp) => {
+
     //http://localhost:3000/api/
-   return app
-    .get('/', (ctx) =>  'hello world')
-    .post('/', (ctx) => ctx.body)
-}
+export const routesController = new Elysia({prefix: '/api'}).use(postController).get('/', () => 'hello world!')

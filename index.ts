@@ -5,10 +5,11 @@ import Elysia from "elysia";
 
 import { port, serveDirectories, serveFromDir, serveFromRouter } from "./lib.ts";
 import consola from "consola";
-import { autoroutes } from "elysia-autoroutes";
+import { routesController } from "./routes/index.ts";
 
 
 const app = new Elysia()
+    .use(routesController)
     .get( '*', async ( ctx ) => {
         // console.log(ctx.request);
         const routerRes = await serveFromRouter(ctx.request)
