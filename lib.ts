@@ -90,6 +90,7 @@ export function serveFromDir (
       }
     } catch ( error )
     {
+      console.error(error)
       // do something here if the request should have been processed
     }
   

@@ -22,10 +22,7 @@ export const build = async (prod = false) => {
         rmSync( BUILD_DIR + '/ssr', { recursive: true, force: true } );
     }
 
-    const cssBuild = await postcssAPI(
-        PROJECT_ROOT + '/assets/app.css',
-        PROJECT_ROOT + '/assets/output.css' )
-
+    
     const clientBuild = await Bun.build( {
         entrypoints: [ PROJECT_ROOT + '/entry/entry-client.tsx', ...Object.values( router.routes ) ],
         splitting: true,
@@ -34,7 +31,7 @@ export const build = async (prod = false) => {
         minify: prod,
         plugins: [ solidPlugin ],
     } );
-
+    
     const serverBuild = await Bun.build( {
         entrypoints: [PROJECT_ROOT + '/entry/entry-server.tsx',...Object.values( router.routes ),],
         splitting: true,
@@ -43,7 +40,7 @@ export const build = async (prod = false) => {
         outdir: `${BUILD_DIR}/ssr`,
         plugins: [ solidPlugin ],
     } );
-
+    
     if (isProd || prod) {
         const prodBuild = await Bun.build( {
             'entrypoints': ['./index.ts'],
@@ -54,21 +51,24 @@ export const build = async (prod = false) => {
             plugins: [html]
         } );
     }
-
+    
     const declarations = `
-/// <reference lib='dom'/>
-/// <reference lib='dom.iterable'/>\n
-declare module '*.html' {
-    const content: string;
-    export default content;
-  }\n
-  declare module '*.svg' {
-    const content: string;
-    export default content;
-  }`
-await Bun.write('./build/imports.d.ts', generateTypes)
-await Bun.write('./build/lib.d.ts', declarations)
-// await Bun.write('./build/ssr/main.css.js', `export default ${JSON.stringify(generateCSS)}`)
+    /// <reference lib='dom'/>
+    /// <reference lib='dom.iterable'/>\n
+    declare module '*.html' {
+        const content: string;
+        export default content;
+    }\n
+    declare module '*.svg' {
+        const content: string;
+        export default content;
+    }`
+    const cssBuild = await postcssAPI(
+        PROJECT_ROOT + '/assets/app.css',
+        PROJECT_ROOT + '/assets/output.css' )
+    await Bun.write('./build/imports.d.ts', generateTypes)
+    await Bun.write('./build/lib.d.ts', declarations)
+    // await Bun.write('./build/ssr/main.css.js', `export default ${JSON.stringify(generateCSS)}`)
 };
 // Note: we are invoking this here so it can be imported and ran directly at the beginning of the file
 // or we can call it from package.json
