@@ -26,7 +26,8 @@ const app = new Elysia()
 })
 
 
-function startServer() {
+async function startServer() {
+    // await build(true)
     isRestarting = true;
     consola.start( 'Starting server...' );
     serverProcess = spawn( {
@@ -44,7 +45,7 @@ function startServer() {
 }
 
 // Start the server initially
-startServer();
+await startServer();
 
 
 

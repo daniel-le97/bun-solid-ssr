@@ -4,6 +4,7 @@ import * as path from 'path';
 import { existsSync, rmSync } from "fs";
 import { html } from "./plugins/html.ts";
 import { postcssAPI } from "./plugins/postcss.ts";
+import consola from "consola";
 // import { BUILD_DIR} from './lib.ts'
 
 const isProd = process.env.NODE_ENV === 'production';
@@ -13,6 +14,8 @@ const BUILD_DIR = path.resolve( PROJECT_ROOT, "build" );
 export const build = async (prod = false) => {
     try {
         
+        consola.info('starting build')
+
         const router = new FileSystemRouter( {
             style: 'nextjs',
             dir: './pages'
@@ -70,6 +73,8 @@ export const build = async (prod = false) => {
             PROJECT_ROOT + '/assets/output.css' )
             await Bun.write('./build/imports.d.ts', generateTypes)
             await Bun.write('./build/lib.d.ts', declarations)
+
+        consola.success('build finished')
             // await Bun.write('./build/ssr/main.css.js', `export default ${JSON.stringify(generateCSS)}`)
         } catch (error) {
             console.log(error);
